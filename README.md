@@ -11,6 +11,9 @@ podman compose up -d        # PostgreSQL 16 auf localhost:5433
 mvn quarkus:dev             # Anwendung auf http://localhost:8080
 ```
 
+Zum Ausprobieren im Browser: Swagger UI unter <http://localhost:8080/q/swagger-ui>, die OpenAPI-Beschreibung
+unter <http://localhost:8080/q/openapi>.
+
 Tests (`mvn test`) brauchen keine laufende Datenbank: Quarkus Dev Services startet über Testcontainers einen eigenen
 Postgres-Container. Bei Podman muss Testcontainers den Socket kennen, z. B. in `~/.testcontainers.properties`:
 
@@ -44,6 +47,8 @@ Verstöße liefern `400 {"error": "..."}`. Die Summe wird gesamt und pro Projekt
 - Records als Request- und Response-DTOs; die Entity wird nie direkt serialisiert. Dauer wird berechnet, nicht gespeichert.
 - Strukturelle Validierung (Bean Validation) am Request, fachliche Regeln im Service, Übersetzung in 400 per ExceptionMapper.
 - Tests gegen eine echte Datenbank statt Mocks: Service-Tests für die Regeln, REST-Tests für die Endpunkte.
+- OpenAPI-Beschreibung und Swagger UI werden von der Extension `quarkus-smallrye-openapi` aus den
+  JAX-RS-Annotationen erzeugt, ohne eigenen Code. Kein eigenes Frontend, die Aufgabe verlangt nur das Backend.
 
 ## Bewusst offen oder vereinfacht
 
