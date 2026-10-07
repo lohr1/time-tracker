@@ -52,6 +52,8 @@ Verstöße liefern `400 {"error": "..."}`. Die Summe wird gesamt und pro Projekt
 - Kein Ändern oder Löschen von Einträgen, keine Paginierung.
 - Bean-Validation-Fehler und fachliche Fehler haben unterschiedliche JSON-Formate.
 - Der `date`-Parameter wird von Hand geparst, weil JAX-RS eine fehlgeschlagene Parameter-Konvertierung mit 404 beantwortet.
+- Die Überlappungsprüfung läuft im Service (lesen, dann schreiben). Bei zwei gleichzeitigen Requests ist sie nicht
+  garantiert; ein Datenbank-Constraint (`EXCLUDE USING gist`) wäre der nächste Schritt.
 
 ## Einsatz von KI
 

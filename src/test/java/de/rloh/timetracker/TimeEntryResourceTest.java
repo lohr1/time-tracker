@@ -92,13 +92,14 @@ class TimeEntryResourceTest {
     }
 
     @Test
-    void getWithUnparsableDateReturns400() {
+    void getWithUnparsableDateReturns400WithMessage() {
         given()
             .queryParam("date", "kein-datum")
         .when()
             .get("/time-entries")
         .then()
-            .statusCode(400);
+            .statusCode(400)
+            .body("error", is("date must be an ISO date like 2026-10-07"));
     }
 
     @Test

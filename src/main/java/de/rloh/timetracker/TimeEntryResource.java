@@ -57,7 +57,11 @@ public class TimeEntryResource {
         try {
             return LocalDate.parse(date);
         } catch (DateTimeParseException e) {
-            throw new BadRequestException("date must be an ISO date like 2026-10-07");
+            Response body = Response.status(Response.Status.BAD_REQUEST)
+                    .type(MediaType.APPLICATION_JSON)
+                    .entity(new ErrorResponse("date must be an ISO date like 2026-10-07"))
+                    .build();
+            throw new BadRequestException(body);
         }
     }
 }
