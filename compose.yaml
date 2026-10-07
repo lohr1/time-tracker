@@ -1,0 +1,9 @@
+services:
+  db:
+    image: docker.io/library/postgres:16
+    environment:
+      POSTGRES_DB: timetracker
+      POSTGRES_USER: timetracker
+      POSTGRES_PASSWORD: timetracker
+    ports:
+      - "5433:5432"
