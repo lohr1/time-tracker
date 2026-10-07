@@ -6,6 +6,9 @@ import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 /** Business rules for time entries. Knows nothing about HTTP. */
 @ApplicationScoped
@@ -38,5 +41,17 @@ public class TimeEntryService {
 
     public List<TimeEntry> entriesForDay(LocalDate day) {
         return repository.findByDay(day);
+    }
+
+    public DaySummary summaryForDay(LocalDate day) {
+        List<TimeEntry> entries = repository.findByDay(day);
+
+        long total = entries.stream().mapToLong(e -> e.duration().toMinutes()).sum();
+        Map<String, Long> perProject = entries.stream().collect(Collectors.groupingBy(
+                TimeEntry::getProject,
+                TreeMap::new,
+                Collectors.summingLong(e -> e.duration().toMinutes())));
+
+        return new DaySummary(day, total, perProject);
     }
 }

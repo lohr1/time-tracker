@@ -79,6 +79,28 @@ class TimeEntryServiceTest {
         assertEquals(at(13, 0), entries.get(1).getStartTime());
     }
 
+    @Test
+    void summarySumsTotalAndPerProject() {
+        service.create("Kunde A", at(9, 0), at(10, 30), null);
+        service.create("Kunde B", at(11, 0), at(12, 0), null);
+        service.create("Kunde A", at(13, 0), at(13, 45), null);
+
+        DaySummary summary = service.summaryForDay(DAY);
+
+        assertEquals(DAY, summary.date());
+        assertEquals(195, summary.totalMinutes());
+        assertEquals(135, summary.minutesPerProject().get("Kunde A"));
+        assertEquals(60, summary.minutesPerProject().get("Kunde B"));
+    }
+
+    @Test
+    void summaryOfEmptyDayIsZero() {
+        DaySummary summary = service.summaryForDay(DAY);
+
+        assertEquals(0, summary.totalMinutes());
+        assertTrue(summary.minutesPerProject().isEmpty());
+    }
+
     private static LocalDateTime at(int hour, int minute) {
         return DAY.atTime(hour, minute);
     }
